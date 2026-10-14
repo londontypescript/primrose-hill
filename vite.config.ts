@@ -1,5 +1,5 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -7,8 +7,29 @@ export default defineConfig({
   test: {
     // Only src: agents' worktrees live inside the repo (.claude/worktrees),
     // and Vitest would otherwise run their copies of the tests too.
-    include: ["src/**/*.test.{ts,tsx}"],
-    environment: "jsdom",
-    setupFiles: ["./src/test/setup.ts"],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "web",
+          include: ["src/web/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+          environment: "jsdom",
+          setupFiles: ["./src/web/test/setup.ts"],
+        },
+      },
+      {
+        // Everything else in src (core, CLI, server, and any folder added
+        // later) runs in Node, so its tests do too: a jsdom window there
+        // would hide code that only works in a browser. Matching by
+        // exclusion means a new folder can't fall outside both projects.
+        extends: true,
+        test: {
+          name: "node",
+          include: ["src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+          exclude: [...configDefaults.exclude, "src/web/**"],
+          environment: "node",
+        },
+      },
+    ],
   },
 });
