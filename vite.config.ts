@@ -12,7 +12,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: "web",
-          include: ["src/web/**/*.test.{ts,tsx}"],
+          include: ["src/web/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
           environment: "jsdom",
           setupFiles: ["./src/web/test/setup.ts"],
         },
@@ -25,7 +25,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: "node",
-          include: ["src/**/*.test.{ts,tsx}"],
+          include: ["src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
           exclude: [...configDefaults.exclude, "src/web/**"],
           environment: "node",
         },
