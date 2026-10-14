@@ -1,4 +1,7 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+  // Two settings: the dashboard in src/web runs in a browser (DOM types,
+  // bundled by Vite); core, CLI and server run in Node, so DOM globals there
+  // fail the type check instead of failing at run time.
+  "references": [{ "path": "./tsconfig.web.json" }, { "path": "./tsconfig.node.json" }]
 }
